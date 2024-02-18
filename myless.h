@@ -1,10 +1,10 @@
 template <class T>
 class MyLess {
 public:
-    bool operator() (const T &x, const T &y);
+    const bool operator() (const T &x, const T &y) const;
 };
 
 template <class T>
-bool MyLess<T>::operator() (const T &x, const T &y) {
+const bool MyLess<T>::operator() (const T &x, const T &y) const {
     return x % 10 < y % 10;
 }
