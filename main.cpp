@@ -15,6 +15,11 @@
 #include "myvector.h"
 #include "myless.h"
 
+void showVector(std::vector<int> &v) {
+    std::copy(v.begin(), v.end(), std::ostream_iterator<int>(std::cout, " "));
+    std::cout << std::endl;
+}
+
 void testUnorderedSet() {
     std::unordered_set<int> S;
     std::vector<int> v = {1, 2, 3, 7, 12, 21};
@@ -40,10 +45,7 @@ void testInsertIterator() {
     auto iter = find(v2.begin(), v2.end(), 4);
     std::insert_iterator<std::vector<int>> i_iter(v2, iter);
     std::copy(v1.begin(), v1.end(), i_iter);
-    for (auto iter = v2.begin(); iter != v2.end(); ++iter) {
-        std::cout << *iter << " ";
-    }
-    std::cout << std::endl;
+    showVector(v2);
 }
 
 void testStreamIterator() {
@@ -63,10 +65,7 @@ void testVectorInsert() {
     std::vector<int> v2 = {3, 4, 5};
     std::vector<int>::iterator iter = std::min_element(v1.begin(), v1.end());
     v2.insert(v2.end(), iter, v1.end());
-    for (auto iter = v2.begin(); iter != v2.end(); ++iter) {
-        std::cout << *iter << " ";
-    }
-    std::cout << std::endl;
+    showVector(v2);
 }
 
 void testFindIf() {
@@ -90,26 +89,17 @@ void testParameterBinding() {
 
     std::vector<int> v;
     std::transform(S.begin(), S.end(), std::back_inserter(v), std::bind(std::multiplies<int>(), std::placeholders::_1, 10));
-    for (auto iter = v.begin(); iter != v.end(); ++iter) {
-        std::cout << *iter << " ";
-    }
-    std::cout << std::endl;
+    showVector(v);
 
     std::vector<int> v1;
     std::transform(S.begin(), S.end(), std::back_inserter(v1), [](int x) {
         return x * 2;
     });
-    for (auto iter = v1.begin(); iter != v1.end(); ++iter) {
-        std::cout << *iter << " ";
-    }
-    std::cout << std::endl;
+    showVector(v1);
 
     std::vector<int> v2;
     std::transform(S.begin(), S.end(), std::back_inserter(v2), std::bind(std::logical_or<bool>(), std::bind(std::greater<int>(), std::placeholders::_1, 3), std::bind(std::less<int>(), std::placeholders::_1, 3)));
-    for (auto iter = v2.begin(); iter != v2.end(); ++iter) {
-        std::cout << *iter << " ";
-    }
-    std::cout << std::endl;
+    showVector(v2);
 }
 
 void testMyLess() {
@@ -198,28 +188,16 @@ void testAlgorithms2() {
     std::transform(v1.begin(), v1.end(), v2.begin(), v3.begin(), [](int x, int y) {
         return x + y;
     });
-    for (auto iter = v3.begin(); iter != v3.end(); ++iter) {
-        std::cout << *iter << " ";
-    }
-    std::cout << std::endl;
+    showVector(v3);
 
     std::swap_ranges(v1.begin(), v1.end(), v2.begin());
-    for (auto iter = v1.begin(); iter != v1.end(); ++iter) {
-        std::cout << *iter << " ";
-    }
-    std::cout << std::endl;
-    for (auto iter = v2.begin(); iter != v2.end(); ++iter) {
-        std::cout << *iter << " ";
-    }
-    std::cout << std::endl;
+    showVector(v1);
+    showVector(v2);
 
     std::vector<int> v4(4);
     std::fill(v4.begin(), v4.end(), 1);
     std::generate(v4.begin(), v4.begin() + 2, rand);
-    for (auto iter = v4.begin(); iter != v4.end(); ++iter) {
-        std::cout << *iter << " ";
-    }
-    std::cout << std::endl;
+    showVector(v4);
 
     std::vector<int> v5 = {2, 4, 6};
     std::replace(v5.begin(), v5.end(), 4, 3);
@@ -234,17 +212,11 @@ void testAlgorithms2() {
 
     std::vector<int> v6 = {3, 5, 5, 5, 7, 8, 9, 9};
     std::vector<int>::iterator new_end = std::unique(v6.begin(), v6.end());
-    for (auto iter = v6.begin(); iter != new_end; ++iter) {
-        std::cout << *iter << " ";
-    }
-    std::cout << std::endl;
+    showVector(v6);
 
     std::vector<int> v7 = {4, 6, 9, 3, 5, 1};
     std::rotate(v7.begin(), v7.begin() + 4, v7.end());
-    for (auto iter = v7.begin(); iter != v7.end(); ++iter) {
-        std::cout << *iter << " ";
-    }
-    std::cout << std::endl;
+    showVector(v7);
     //std::random_shuffle(v7.begin(), v7.end()); // removed in C++17
 }
 
@@ -252,22 +224,13 @@ void testSort() {
     std::vector<int> v1 = {9, 50, -4, 3, 1, 49, 32};
 
     std::sort(v1.begin(), v1.end(), MyLess<int>());
-    for (auto iter = v1.begin(); iter != v1.end(); ++iter) {
-        std::cout << *iter << " ";
-    }
-    std::cout << std::endl;
+    showVector(v1);
 
     std::partial_sort(v1.begin(), v1.begin() + 3, v1.end(), std::greater<int>());
-    for (auto iter = v1.begin(); iter != v1.end(); ++iter) {
-        std::cout << *iter << " ";
-    }
-    std::cout << std::endl;
+    showVector(v1);
 
     std::nth_element(v1.begin(), v1.begin() + 3, v1.end());
-    for (auto iter = v1.begin(); iter != v1.end(); ++iter) {
-        std::cout << *iter << " ";
-    }
-    std::cout << std::endl;
+    showVector(v1);
 
     std::stable_partition(v1.begin(), v1.end(), [](int x) {
         return x > 40;
@@ -288,10 +251,7 @@ void testSort() {
         std::cout << "v2 is a heap" << std::endl;
         std::sort_heap(v2.begin(), v2.end());
     }
-    for (auto iter = v2.begin(); iter != v2.end(); ++iter) {
-        std::cout << *iter << " ";
-    }
-    std::cout << std::endl;
+    showVector(v2);
 }
 
 void testSortedAlgorithms() {
@@ -316,10 +276,7 @@ void testSortedAlgorithms() {
 
     std::vector<int> v4 = {1, 2, 5, 7, 2, 4, 5, 8, 9};
     std::inplace_merge(v4.begin(), v4.begin() + 4, v4.end());
-    for (auto iter = v4.begin(); iter != v4.end(); ++iter) {
-        std::cout << *iter << " ";
-    }
-    std::cout << std::endl;
+    showVector(v4);
 
     std::vector<int> v5 = {2, 2, 4, 7};
     std::vector<int> v6 = {2, 4, 8};
